@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>智码验证码批量业务API接口说明</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  </head>
+  
+  <body>
+
+  <p align="center" style="font-size:20px;font-weight:bold"> 
+  智码验证码批量业务API接口说明
+  </p>
+  <p align="center"> 
+  最近修订日期：2018年5月13日<br/> 版本 v3.1.1
+  </p>
+<p style="font-size:20px;font-weight:bold"> 
+  ·1、接口请求说明
+  </p>
+     <p> 
+  接口基地址：http:// 120.78.198.87/zsmcode/<br/>
+编码：UTF-8<br/>
+请求方式：HTTP GET<br/>
+说明：所有请求以.php结尾<br>
+  </p>
+  <p style="font-size:18px;font-weight:bold"> 
+  ·1.1、注意事项
+  </p>
+  <p> 
+  1、使用批量接口请求前请先在智码APP申请开发资格，系统会根据您的申请为您生成开发密钥，开发密钥是您请求数据的唯一凭据。<br/>
+2、所有请求均只支持GET请求方式。<br/>
+3、请求号码并使用后请主动释放，没主动释放的号码，系统会在30分钟内强制释放。<br/>
+4、SESSION有效期为15分钟，如果SESSION失效，请重新验证密钥。<br/>
+5、所有接口返回值都为STRING格式。<br/> </p>
+
+
+
+
+<p style="font-size:20px;font-weight:bold"> 
+·2、验证密钥
+</p>
+<p>
+地址：http:// 120.78.198.87/zsmcode/pkey/verification.php<br/>
+功能：用于其他所有接口调用前的合法性开发者验证，只有验证通过的用户才是有效的开发者，才能进行后续接口调用。
+</p>
+
+  <p style="font-size:18px;font-weight:bold"> 
+  ·2.1、参数
+  </p>
+<p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+  <tr bgcolor="#EBEBEB">
+    <th>名称</th>
+    <th>是否必须</th>
+	<th>缺省</th>
+	<th>描述</th>
+  </tr>
+  <tr>
+    <td>account</td>
+    <td>是</td>
+	<td></td>
+	<td>开发者账号</td>
+  </tr>
+  <tr>
+    <td>pkey</td>
+    <td>是</td>
+	<td></td>
+	<td>申请开发者账号时设置的密钥</td>
+  </tr>
+</table>
+</p>
+
+  <p style="font-size:18px;font-weight:bold"> 
+  ·2.2、返回值
+  </p>
+
+<p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+  <tr bgcolor="#EBEBEB">
+    <th>名称</th>
+    <th>值</th>
+	<th>是否必定返回</th>
+	<th>描述</th>
+  </tr>
+  <tr>
+    <td>valid</td>
+    <td>Y/N</td>
+	<td>是</td>
+	<td>是否验证通过。Y：验证通过；N：验证不通过。</td>
+  </tr>
+  <tr>
+    <td>leftQuantity</td>
+    <td>整数，比如158</td>
+	<td>否</td>
+	<td>短信剩余数量，valid为Y时返回</td>
+  </tr>
+  <tr>
+    <td>msg</td>
+    <td>请求错误信息，比如“账户异常”</td>
+	<td>否</td>
+	<td>valid为N时返回此字段，描述错误信息</td>
+  </tr>
+</table>
+</p>
+  <p style="font-size:18px;font-weight:bold"> 
+  ·2.3、备注
+  </p>
+  <p> 
+  账户状态正常且密钥验证通过时，可在此SESSION中进行之后的各种操作。否则需要根据错误提示信息进行重新验证。
+  </p>
+  
+  
+<p style="font-size:20px;font-weight:bold"> 
+·3、获取项目信息
+</p>
+<p>
+地址：http:// 120.78.198.87/zsmcode/items/details.php<br/>
+功能：获取项目的当前可用信息、价格信息等。
+</p>
+
+  <p style="font-size:18px;font-weight:bold"> 
+  ·3.1、参数
+  </p>
+<p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+  <tr bgcolor="#EBEBEB">
+    <th>名称</th>
+    <th>是否必须</th>
+	<th>缺省</th>
+	<th>描述</th>
+  </tr>
+  <tr>
+    <td>itemId</td>
+    <td>是</td>
+	<td></td>
+	<td>项目编号</td>
+  </tr>
+</table>
+</p>
+
+  <p style="font-size:18px;font-weight:bold"> 
+  ·3.2、返回值
+  </p>
+<p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+  <tr bgcolor="#EBEBEB">
+    <th>名称</th>
+    <th>值</th>
+	<th>是否必定返回</th>
+	<th>描述</th>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>项目名称</td>
+	<td>特殊可选</td>
+	<td>与itemId对应的项目的名称</td>
+  </tr>
+  <tr>
+    <td>status</td>
+    <td>项目状态</td>
+	<td>是</td>
+	<td>1-正常，2-已过期，3-其他异常</td>
+  </tr>
+  <tr>
+    <td>price</td>
+    <td>单条价格</td>
+	<td>特殊可选</td>
+	<td>格式：0.1(10000), 0.01(10001-30000), 0.08(+) 价格区间以“,”分开，“+”代表剩余所有段。</td>
+  </tr>
+  
+    <tr>
+    <td>type</td>
+    <td>项目类型</td>
+	<td>特殊可选</td>
+	<td>1-每次请求只能获取一条 2-每次请求可以获取多条 3-可发送一条 4-可发送多条 5-可收发多条 6-可收发多条</td>
+  </tr>
+    <tr>
+    <td>msg</td>
+    <td>错误信息</td>
+	<td>否</td>
+	<td>比如“项目编号不存在”，status不为1时有效</td>
+  </tr>
+</table>
+</p>
+  <p style="font-size:18px;font-weight:bold"> 
+  ·3.3、备注
+  </p>
+  <p> 
+  可选接口，并非每次获使用短信都要调用。
+  </p>
+
+  
+
+<p style="font-size:20px;font-weight:bold"> 
+·4、获取号码
+</p>
+<p>
+地址：http:// 120.78.198.87/zsmcode/phoneNos/get.php<br/>
+功能：获取随机或指定手机号码，是下一步接收短信的前提。
+</p>
+
+  <p style="font-size:18px;font-weight:bold"> 
+  ·4.1、参数
+  </p>
+<p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+  <tr bgcolor="#EBEBEB">
+    <th>名称</th>
+    <th>是否必须</th>
+	<th>缺省</th>
+	<th>描述</th>
+  </tr>
+  <tr>
+    <td>itemId</td>
+    <td>是</td>
+	<td></td>
+	<td>项目编号</td>
+  </tr>
+    <tr>
+    <td>quantity</td>
+    <td>是</td>
+	<td>1</td>
+	<td>本次获取数量</td>
+  </tr>
+      <tr>
+    <td>phoneNo</td>
+    <td>否</td>
+	<td></td>
+	<td>获取并锁定指定号码，不填则获取随机号码。</td>
+  </tr>
+      <tr>
+    <td>areaCode</td>
+    <td>否</td>
+	<td></td>
+	<td>归属地编号，不填则随机归属地</td>
+  </tr>
+      <tr>
+    <td>international</td>
+    <td>否</td>
+	<td>N</td>
+	<td>Y-获取国际号码，不支持指定国家和区域。N-不获取国际号码。</td>
+  </tr>
+      <tr>
+    <td>type</td>
+    <td>否</td>
+	<td></td>
+	<td>运营商，国内号码可选：1-中国移动 2-中国联通 3-中国电信。不填则随机。</td>
+  </tr>
+</table>
+</p>
+
+  <p style="font-size:18px;font-weight:bold"> 
+  ·4.2、返回值
+  </p>
+<p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+  <tr bgcolor="#EBEBEB">
+    <th>名称</th>
+    <th>值</th>
+	<th>是否必定返回</th>
+	<th>描述</th>
+  </tr>
+  <tr>
+    <td>phoneNos</td>
+    <td>返回的号码</td>
+	<td>特殊可选</td>
+	<td>返回的号码。多个号码时以半角逗号“,”隔开。</td>
+  </tr>
+  <tr>
+    <td>msg</td>
+    <td>异常信息</td>
+	<td>否</td>
+	<td>比如“号码余量不足”</td>
+  </tr>
+</table>
+</p>
+  <p style="font-size:18px;font-weight:bold"> 
+  ·4.3、备注
+  </p>
+  <p> 
+如果没有返回请，请处理错误信息后重试。
+  </p>
+
+  
+<p style="font-size:20px;font-weight:bold"> 
+·5、获取短信
+</p>
+<p>
+地址：http:// 120.78.198.87/zsmcode/sms/get.php<br/>
+功能：根据提交的项目编号和号码获取短信，从而进行下一步操作，比如读取验证码。
+</p>
+
+  <p style="font-size:18px;font-weight:bold"> 
+  ·5.1、参数
+  </p>
+<p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+  <tr bgcolor="#EBEBEB">
+    <th>名称</th>
+    <th>是否必须</th>
+	<th>缺省</th>
+	<th>描述</th>
+  </tr>
+  <tr>
+    <td>itemId</td>
+    <td>是</td>
+	<td></td>
+	<td>项目编号</td>
+  </tr>
+  <tr>
+    <td>phoneNo</td>
+    <td>是</td>
+	<td></td>
+	<td>要获取信息的手机号</td>
+  </tr>
+</table>
+</p>
+
+  <p style="font-size:18px;font-weight:bold"> 
+  ·5.2、返回值
+  </p>
+<p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+  <tr bgcolor="#EBEBEB">
+    <th>名称</th>
+    <th>值</th>
+	<th>是否必定返回</th>
+	<th>描述</th>
+  </tr>
+  <tr>
+    <td>sm</td>
+    <td>接收短信的内容</td>
+	<td>否</td>
+	<td>获取的对应号码短信内容。</td>
+  </tr>
+  <tr>
+    <td>status</td>
+    <td>接收状态</td>
+	<td>否</td>
+	<td>1-接收中 2-已接收 3-消息丢失 4-接收超时 5-其他错误</td>
+  </tr>
+  <tr>
+    <td>msg</td>
+    <td>异常信息</td>
+	<td>否</td>
+	<td>如果有异常信息则通过此字段返回。</td>
+  </tr>
+</table>
+</p>
+  <p style="font-size:18px;font-weight:bold"> 
+  ·5.3、备注
+  </p>
+  <p> 
+建议每5秒请求一次，直到status不为1为止。
+  </p>
+  
+  
+  <p style="font-size:20px;font-weight:bold"> 
+·6、发送短信与状态查询
+</p>
+<p>
+地址：http:// 120.78.198.87/zsmcode/sms/send.php<br/>
+功能：用于对指定项目指定号码发送短信，并用于查询发送状态。
+</p>
+
+  <p style="font-size:18px;font-weight:bold"> 
+  ·6.1、参数
+  </p>
+<p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+  <tr bgcolor="#EBEBEB">
+    <th>名称</th>
+    <th>是否必须</th>
+	<th>缺省</th>
+	<th>描述</th>
+  </tr>
+  <tr>
+    <td>itemId</td>
+    <td>是</td>
+	<td></td>
+	<td>项目编号</td>
+  </tr>
+  <tr>
+    <td>phoneNo</td>
+    <td>是</td>
+	<td></td>
+	<td>手机号</td>
+  </tr>
+  <tr>
+    <td>smcontent</td>
+    <td>否</td>
+	<td></td>
+	<td>要发送的内容，querys为N时不能为空。</td>
+  </tr>
+  <tr>
+    <td>querys</td>
+    <td>否</td>
+	<td>N</td>
+	<td>Y-查询发送状态，N-发送短信。</td>
+  </tr>
+</table>
+</p>
+
+  <p style="font-size:18px;font-weight:bold"> 
+  ·6.2、返回值
+  </p>
+<p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+  <tr bgcolor="#EBEBEB">
+    <th>名称</th>
+    <th>值</th>
+	<th>是否必定返回</th>
+	<th>描述</th>
+  </tr>
+  <tr>
+    <td>msg</td>
+    <td>发送结果信息</td>
+	<td>是</td>
+	<td>为OK则说明发送成功，否则为异常信息。</td>
+  </tr>
+</table>
+</p>
+  <p style="font-size:18px;font-weight:bold"> 
+  ·6.3、备注
+  </p>
+  <p> 
+查询是否发送成功，请将参数querys赋值为Y请求查询状态。
+  </p>
+  
+  <p style="font-size:20px;font-weight:bold"> 
+·7、释放手机号
+</p>
+<p>
+地址：http:// 120.78.198.87/zsmcode/sms/release.php<br/>
+功能：用于释放指定的号码。用过的号码释放后可以进行后续使用，适用于支持一手机号绑定多个账户的项目。
+</p>
+
+  <p style="font-size:18px;font-weight:bold"> 
+  ·7.1、参数
+  </p>
+<p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+  <tr bgcolor="#EBEBEB">
+    <th>名称</th>
+    <th>是否必须</th>
+	<th>缺省</th>
+	<th>描述</th>
+  </tr>
+  <tr>
+    <td>phoneNo</td>
+    <td>是</td>
+	<td></td>
+	<td>项目编号</td>
+  </tr>
+  <tr>
+    <td>phoneNo</td>
+    <td>是</td>
+	<td></td>
+	<td>要释放的号码，多个号码用半角逗号“,”隔开。</td>
+  </tr>
+  <tr>
+    <td>itemId</td>
+    <td>否</td>
+	<td></td>
+	<td>要释放的号码所在的项目。如果为空，则释放在所有项目中的锁定。</td>
+  </tr>
+</table>
+</p>
+
+  <p style="font-size:18px;font-weight:bold"> 
+  ·7.2、返回值
+  </p>
+<p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+  <tr bgcolor="#EBEBEB">
+    <th>名称</th>
+    <th>值</th>
+	<th>是否必定返回</th>
+	<th>描述</th>
+  </tr>
+  <tr>
+    <td>msg</td>
+    <td>释放信息</td>
+	<td>是</td>
+	<td>值为OK时释放成功，否则请根据返回信息判断异常。</td>
+  </tr>
+</table>
+</p>
+  <p style="font-size:18px;font-weight:bold"> 
+  ·7.3、备注
+  </p>
+  <p> 
+不同项目号码释放时请分开进行。
+  </p>
+  
+      
+  <p style="font-size:20px;font-weight:bold"> 
+·8、释放所有号码
+</p>
+<p>
+地址：http:// 120.78.198.87/zsmcode/sms/releaseAll.php<br/>
+功能：释放所有的号码，包括同一开发者请求过的所有的号码。
+</p>
+
+  <p style="font-size:18px;font-weight:bold"> 
+  ·8.1、参数
+  </p>
+<p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+  <tr bgcolor="#EBEBEB">
+    <th>名称</th>
+    <th>是否必须</th>
+	<th>缺省</th>
+	<th>描述</th>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+  </tr>
+</table>
+</p>
+
+  <p style="font-size:18px;font-weight:bold"> 
+  ·8.2、返回值
+  </p>
+<p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+  <tr bgcolor="#EBEBEB">
+    <th>名称</th>
+    <th>值</th>
+	<th>是否必定返回</th>
+	<th>描述</th>
+  </tr>
+  <tr>
+    <td>msg</td>
+    <td>释放信息</td>
+	<td>是</td>
+	<td>值为OK时释放成功，否则请根据返回信息判断异常。</td>
+  </tr>
+</table>
+</p>
+  <p style="font-size:18px;font-weight:bold"> 
+  ·8.3、备注
+  </p>
+  <p> 
+使用过的号码如果没有被及时释放，系统会在30分钟后自动释放。
+  </p>
+  
+      
+  <p style="font-size:20px;font-weight:bold"> 
+·9、加入黑名单
+</p>
+<p>
+地址：http://120.78.198.87/zsmcode/sms/block.php<br/>
+功能：将号码加入黑名单。加入黑名单的号码不会再在此项目中出现，避免重复获取。适用于使用手机号码注册的情况。
+</p>
+
+  <p style="font-size:18px;font-weight:bold"> 
+  ·9.1、参数
+  </p>
+<p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+  <tr bgcolor="#EBEBEB">
+    <th>名称</th>
+    <th>是否必须</th>
+	<th>缺省</th>
+	<th>描述</th>
+  </tr>
+  <tr>
+    <td>itemId</td>
+    <td>是</td>
+	<td></td>
+	<td>项目编号</td>
+  </tr>
+  <tr>
+    <td>phoneNo</td>
+    <td>是</td>
+	<td></td>
+	<td>要加入黑名单的号码。</td>
+  </tr>
+</table>
+</p>
+
+  <p style="font-size:18px;font-weight:bold"> 
+  ·9.2、返回值
+  </p>
+<p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+  <tr bgcolor="#EBEBEB">
+    <th>名称</th>
+    <th>值</th>
+	<th>是否必定返回</th>
+	<th>描述</th>
+  </tr>
+  <tr>
+    <td>msg</td>
+    <td>加入黑名单信息</td>
+	<td>是</td>
+	<td>值为OK时加入黑名单成功，否则请根据返回信息判断异常。</td>
+  </tr>
+</table>
+</p>
+  <p style="font-size:18px;font-weight:bold"> 
+  ·9.3、备注
+  </p>
+  <p> 
+加入黑名单后在指定项目中将无法再请求到此号码，请慎重操作。
+  </p>
+  
+  </body>
+</html>
